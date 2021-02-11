@@ -13,6 +13,9 @@ import CustomInput from "./components/CustomInput";
 import CustomLabel from "./components/CustomLabel";
 import InfoCard from "./components/InfoCard";
 import ERC721 from "./utils/abis/ERC721";
+import ERC20 from "./utils/abis/ERC20";
+import MintPopup from "./components/MintPopup";
+import lockNft from "./utils/functions";
 
 const App = () => {
   window.ethereum.enable();
@@ -22,6 +25,7 @@ const App = () => {
   const [nft, setNft] = useState(""); // {address: "", tokenId: ""}
   const [vault, setVault] = useState("");
   const [ballot, setBallot] = useState("");
+  const [vaults, setVaults] = useState("");
 
   const handleAssets = (chg) => {
     setAssets((assets) => [...assets, chg]);
@@ -49,14 +53,62 @@ const App = () => {
         //Trigger notification of invalid/unsupported contract
       });
   };
-
-  const handleLock = (addr) => {
-    setVault(addr);
-    console.log("updated vault address", addr);
-  };
   const handleBallot = (ballot) => {
     setBallot(ballot);
     console.log("updated ballot: ", ballot);
+  };
+  const handleVault = (addr) => {
+    setVault(addr);
+    const vaultInstance = new ethers.Contract(addr, ERC20, provider);
+    vaultInstance.functions
+      .balanceOf(window.ethereum.selectedAddress)
+      .then((balance) => {
+        if (vaults.length < 1) {
+          console.log("first setVaults");
+          setVaults([
+            {
+              address: addr,
+              balance: ethers.utils.formatEther(balance.toString()),
+            },
+          ]);
+        } else if (
+          vaults.filter((vault) => vault.address == addr).length == 0
+        ) {
+          setVaults((vaults) => [
+            ...vaults,
+            {
+              address: addr,
+              balance: ethers.utils.formatEther(balance.toString()),
+            },
+          ]);
+          console.log("updating number:", vaults.length);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        if (vaults.length < 1) {
+          setVaults([{ address: addr, balance: "unkown" }]);
+        } else if (
+          vaults.filter((vault) => vault.address == addr).length == 0
+        ) {
+          setVaults((vaults) => [
+            ...vaults,
+            { address: addr, balance: "unkown" },
+          ]);
+        }
+        console.log("updated vault address", addr);
+      });
+  };
+
+  const handleMint = (args) => {
+    lockNft(
+      provider,
+      nft,
+      handleVault,
+      args.totalSupply,
+      args.name,
+      args.symbol
+    );
   };
   return (
     <div className='App'>
@@ -68,10 +120,14 @@ const App = () => {
         updateState={handleCustomNftAddress}
       />
       <label>Lock your NFT and mint corresponding erc20shares</label>
-      <div>
-        <label>Address of newly minted erc20: {vault}</label>
-      </div>
-      <LockNft provider={provider} nft={nft} updateState={handleLock} />
+      <LockNft provider={provider} nft={nft} updateState={handleVault} />
+      <MintPopup updateState={handleMint} />
+      <label>or provide address to your own erc20</label>
+      <CustomInput
+        name='add erc20 share address'
+        state={vault}
+        updateState={handleVault}
+      />
 
       {/* <InitializeBallot
         provider={provider}
@@ -80,7 +136,14 @@ const App = () => {
       />
       <CustomInput name='Change Vault' state={vault} updateState={handleLock} /> */}
       <div>
-        <InfoCard nft={nft} assets={assets} updateState={setNft} />
+        <InfoCard
+          vaults={vaults}
+          vault={vault}
+          nft={nft}
+          assets={assets}
+          updateState={setNft}
+          updateVault={handleVault}
+        />
       </div>
     </div>
   );
