@@ -120,7 +120,6 @@ const App = () => {
         updateState={handleCustomNftAddress}
       />
       <label>Lock your NFT and mint corresponding erc20shares</label>
-      <LockNft provider={provider} nft={nft} updateState={handleVault} />
       <MintPopup updateState={handleMint} />
       <label>or provide address to your own erc20</label>
       <CustomInput

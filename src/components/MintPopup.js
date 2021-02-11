@@ -84,7 +84,7 @@ const MintPopup = (props) => {
             Cancel
           </Button>
           <Button onClick={handleSubmit} color='primary'>
-            Subscribe
+            Approve and Mint
           </Button>
         </DialogActions>
       </Dialog>

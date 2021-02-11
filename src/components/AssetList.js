@@ -19,9 +19,10 @@ const AssetList = (props) => {
       });
       return (
         <DataGrid
+          autoHeight
           rows={rows}
           columns={columns}
-          pageSize={10}
+          pageSize={5}
           onRowClick={onSelection}
         />
       );
@@ -34,6 +35,6 @@ const AssetList = (props) => {
     props.updateState(newNft);
   };
 
-  return <div style={{ height: 400, width: "50%" }}>{grid()}</div>;
+  return <div style={{ width: "100%" }}>{grid()}</div>;
 };
 export default AssetList;

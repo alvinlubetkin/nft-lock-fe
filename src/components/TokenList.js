@@ -21,9 +21,10 @@ const TokenList = (props) => {
       });
       return (
         <DataGrid
+          autoHeight
           rows={rows}
           columns={columns}
-          pageSize={10}
+          pageSize={5}
           onRowClick={onSelection}
         />
       );
@@ -35,6 +36,6 @@ const TokenList = (props) => {
     props.updateState(event.row.address);
   };
 
-  return <div style={{ height: 400, width: "50%" }}>{grid()}</div>;
+  return <div className='center'>{grid()}</div>;
 };
 export default TokenList;
