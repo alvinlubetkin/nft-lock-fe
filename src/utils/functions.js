@@ -3,7 +3,15 @@ import { VaultManagerAddressRinkeby } from "../utils/constants";
 import VaultManagerABI from "../utils/abis/VaultManager";
 import ERC721ABI from "../utils/abis/ERC721";
 
-const lockNft = async (provider, nft, updateState, supply, name, symbol) => {
+const lockNft = async (
+  provider,
+  nft,
+  updateState,
+  supply,
+  name,
+  symbol,
+  removeNft
+) => {
   const managerInstance = new ethers.Contract(
     VaultManagerAddressRinkeby,
     VaultManagerABI,
@@ -49,6 +57,7 @@ const lockNft = async (provider, nft, updateState, supply, name, symbol) => {
 
   managerInstance.on("VaultCreated", (vault, creator, underlying, tokenId) => {
     updateState(vault);
+    removeNft(nft);
   });
 };
 

@@ -66,6 +66,7 @@ const MintPopup = (props) => {
             id='name'
             label='Symbol'
             type='name'
+            rowsMax='1'
             fullWidth
             onChange={handleSymbol}
           />

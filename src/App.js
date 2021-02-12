@@ -31,6 +31,15 @@ const App = () => {
     setAssets((assets) => [...assets, chg]);
     setNft(chg);
   };
+  const removeNft = (nft) => {
+    setAssets((assets) =>
+      assets.filter((asset) => {
+        if (asset.address != nft.address && asset.tokenId != nft.tokenId) {
+          return asset;
+        }
+      })
+    );
+  };
 
   const handleCustomNftAddress = (addr) => {
     console.log("address", addr);
@@ -107,7 +116,8 @@ const App = () => {
       handleVault,
       args.totalSupply,
       args.name,
-      args.symbol
+      args.symbol,
+      removeNft
     );
   };
   return (
@@ -121,12 +131,12 @@ const App = () => {
       />
       <label>Lock your NFT and mint corresponding erc20shares</label>
       <MintPopup updateState={handleMint} />
-      <label>or provide address to your own erc20</label>
+      {/* <label>or provide address to your own erc20</label>
       <CustomInput
         name='add erc20 share address'
         state={vault}
         updateState={handleVault}
-      />
+      /> */}
 
       {/* <InitializeBallot
         provider={provider}

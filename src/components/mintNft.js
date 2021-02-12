@@ -1,6 +1,7 @@
 import { ethers } from "ethers";
 import { TestableNFTAddressRinkeby } from "../utils/constants";
 import TestableNFTABI from "../utils/abis/TestableNFT";
+import { Button } from "@material-ui/core";
 
 const MintTestNft = ({ provider, updateState }) => {
   const testNftInstance = new ethers.Contract(
@@ -29,7 +30,9 @@ const MintTestNft = ({ provider, updateState }) => {
 
   return (
     <div>
-      <button onClick={() => mint()}>Mint a Test NFT</button>
+      <Button variant='outlined' onClick={() => mint()}>
+        Mint a Test NFT
+      </Button>
     </div>
   );
 };

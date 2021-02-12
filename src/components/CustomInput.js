@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Button, TextField } from "@material-ui/core";
 
 const CustomInput = (props) => {
   const [inputs, setInputs] = useState("");
@@ -27,14 +28,17 @@ const CustomInput = (props) => {
     <div>
       <label>
         <div>
-          <button onClick={() => props.updateState(inputs)}>
+          <Button variant='outlined' onClick={() => props.updateState(inputs)}>
             {props.name}
-          </button>
-          <input
-            type='text'
-            value={inputs}
-            onChange={(event) => setInputs(event.target.value)}
-          />
+          </Button>
+          <div>
+            {" "}
+            <TextField
+              type='name'
+              variant='outlined'
+              onChange={(event) => setInputs(event.target.value)}
+            />
+          </div>
         </div>
       </label>
     </div>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { DataGrid } from "@material-ui/data-grid";
+import { Typography } from "@material-ui/core";
 const AssetList = (props) => {
   const columns = [
     { field: "id", headerName: "Index", width: 200 },
@@ -18,13 +19,16 @@ const AssetList = (props) => {
         rows.push({ ...asset, id: i });
       });
       return (
-        <DataGrid
-          autoHeight
-          rows={rows}
-          columns={columns}
-          pageSize={5}
-          onRowClick={onSelection}
-        />
+        <div>
+          <Typography>Available NFT's</Typography>
+          <DataGrid
+            autoHeight
+            rows={rows}
+            columns={columns}
+            pageSize={5}
+            onRowClick={onSelection}
+          />
+        </div>
       );
     }
   };
